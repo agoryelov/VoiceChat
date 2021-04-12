@@ -10,32 +10,78 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="20dp">
-        <Button
-            android:id="@+id/btn_start_speak"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Start Speak" />
-        <Button
-            android:id="@+id/btn_stop_speak"
-            android:layout_width="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_start_speak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Start Speak" />
+            <Button
+                android:id="@+id/btn_stop_speak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Stop Speak" />
+            <Button
+                android:id="@+id/btn_start_listen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_margin="10dp"
+                android:backgroundTint="@color/teal_700"
+                android:text="Start Listen" />
+            <Button
+                android:id="@+id/btn_stop_listen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_margin="10dp"
+                android:backgroundTint="@color/teal_700"
+                android:text="Stop Listen" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Stop Speak" />
-        <Button
-            android:id="@+id/btn_start_listen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:backgroundTint="@color/teal_700"
-            android:text="Start Listen" />
-        <Button
-            android:id="@+id/btn_stop_listen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:backgroundTint="@color/teal_700"
-            android:text="Stop Listen" />
+            android:orientation="vertical">
+            <ScrollView
+                android:id="@+id/svTerminal"
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+                <TextView
+                    android:id="@+id/tvTerminal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:lineSpacingMultiplier="1.5"
+                    android:textSize="13sp"
+                    android:typeface="monospace"
+                    android:text="" />
+            </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/spActions"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="0dp"
+                    android:spinnerMode="dialog"
+                    android:layout_height="wrap_content">
+                </Spinner>
+                <Button
+                    android:id="@+id/btnSendMessage"
+                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send">
+                </Button>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
