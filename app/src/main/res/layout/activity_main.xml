@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:layout_margin="20dp">
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -30,7 +31,6 @@
                 android:id="@+id/btn_start_listen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_margin="10dp"
                 android:backgroundTint="@color/teal_700"
                 android:text="Start Listen" />
@@ -38,7 +38,6 @@
                 android:id="@+id/btn_stop_listen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_margin="10dp"
                 android:backgroundTint="@color/teal_700"
                 android:text="Stop Listen" />
@@ -50,7 +49,7 @@
             <ScrollView
                 android:id="@+id/svTerminal"
                 android:layout_width="match_parent"
-                android:layout_height="250dp">
+                android:layout_height="400dp">
                 <TextView
                     android:id="@+id/tvTerminal"
                     android:layout_width="match_parent"
@@ -64,7 +63,6 @@
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
                 android:layout_height="wrap_content">
-
                 <Spinner
                     android:id="@+id/spActions"
                     android:layout_weight="1"
@@ -80,6 +78,27 @@
                     android:layout_height="wrap_content"
                     android:text="Send">
                 </Button>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnClear"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Clear Output" />
+
+                <Button
+                    android:id="@+id/btnDisconnect"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Disconnect" />
             </LinearLayout>
         </LinearLayout>
 

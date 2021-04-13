@@ -35,35 +35,24 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_MICROPHONE = 1;
     Spinner spActions;
+    ArrayAdapter<String> actionsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Server to Client: <010> <001> <004> <000-000-000-156>
-//        Server to Client: <020> <001> <001> <001>
-//        byte[] message1 = {10, 1, 4, 0, 0, 0, (byte) 156};
-//        System.out.println(Arrays.toString(message1));
-//        Message m1 = new Message(message1);
-//        System.out.println(Arrays.toString(m1.getRawMessage()));
-
         ScrollView svTerminal = findViewById(R.id.svTerminal);
         TextView tvTerminal = findViewById(R.id.tvTerminal);
         Button btnSendMessage = findViewById(R.id.btnSendMessage);
 
-//        String board = "\n        X | _ | _ \n        _ | _ | _ \n        _ | O | _";
-
-        String[] arraySpinner = new String[] {
-                "Cell 1x1", "Cell 1x2", "Cell 1x3", "Cell 2x1", "Cell 2x2", "Cell 2x3", "Cell 3x1", "Cell 3x2", "Cell 3x3"
-        };
 
         spActions = findViewById(R.id.spActions);
 
-        GameClient gameClient = new GameClient(tvTerminal);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gameClient.currentActions);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spActions.setAdapter(adapter);
+        actionsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        GameClient gameClient = new GameClient(tvTerminal, actionsAdapter);
+        actionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spActions.setAdapter(actionsAdapter);
 
         btnSendMessage.setOnClickListener(v -> {
             String selectedAction = spActions.getSelectedItem().toString();
@@ -71,7 +60,15 @@ public class MainActivity extends AppCompatActivity {
             svTerminal.post(() -> svTerminal.fullScroll(ScrollView.FOCUS_DOWN));
         });
 
+        Button btnDisconnect = findViewById(R.id.btnDisconnect);
+        btnDisconnect.setOnClickListener(view -> {
+            gameClient.disconnect();
+        });
 
+        Button btnClear = findViewById(R.id.btnClear);
+        btnClear.setOnClickListener(view -> {
+            tvTerminal.setText("");
+        });
 
 //        ActivityCompat.requestPermissions(this,
 //                new String[]{Manifest.permission.RECORD_AUDIO},
