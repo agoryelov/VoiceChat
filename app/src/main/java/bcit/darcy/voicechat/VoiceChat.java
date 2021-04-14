@@ -22,10 +22,11 @@ public class VoiceChat {
     private static final int CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    private static final int UUID_SIZE = 4; // bytes
     private static final int ORDER_SIZE = 4; // bytes
+    private static final int UUID_SIZE = 4; // bytes
+    private static final int PORT_SIZE = 2; // bytes
     private static final int VOICE_SIZE = 5000; // bytes
-    private static final int PACKET_SIZE = UUID_SIZE + ORDER_SIZE + VOICE_SIZE; // bytes
+    private static final int PACKET_SIZE = ORDER_SIZE + UUID_SIZE + PORT_SIZE + VOICE_SIZE;
 
     private boolean isSpeaking = false;
     private boolean isListening = false;
@@ -42,8 +43,6 @@ public class VoiceChat {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-
-        startListen();
     }
 
     public void startSpeak() {
@@ -59,7 +58,7 @@ public class VoiceChat {
 
             while (isSpeaking) {
                 buffer.clear();
-                buffer.putInt(UUID).putInt(currentOrder++);
+                buffer.putInt(currentOrder++).putInt(UUID).putShort((short) 0);
 
                 byte[] voiceBuffer = new byte[VOICE_SIZE];
                 recorder.read(voiceBuffer, 0, VOICE_SIZE);
@@ -74,7 +73,7 @@ public class VoiceChat {
 
                 try {
                     InetAddress dest = InetAddress.getByName("70.71.235.164");
-                    DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 2033);
+                    DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 2034);
                     voiceSocket.send(p);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -118,12 +117,12 @@ public class VoiceChat {
                 System.out.println("RECEIVED:");
                 System.out.println(Arrays.toString(buffer));
 
-                int packetOrder = ByteBuffer.wrap(buffer).getInt(UUID_SIZE);
+                int packetOrder = ByteBuffer.wrap(buffer).getInt();
                 System.out.println("currentOrder=" + currentOrder);
                 System.out.println("packetOrder=" + packetOrder);
                 if (packetOrder > currentOrder) {
                     currentOrder = packetOrder;
-                    track.write(buffer, UUID_SIZE + ORDER_SIZE, VOICE_SIZE);
+                    track.write(buffer,ORDER_SIZE + UUID_SIZE + PORT_SIZE, VOICE_SIZE);
                 }
             }
 

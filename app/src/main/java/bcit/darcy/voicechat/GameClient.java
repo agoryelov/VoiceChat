@@ -3,6 +3,7 @@ package bcit.darcy.voicechat;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ArrayAdapter;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -17,17 +18,19 @@ import bcit.darcy.voicechat.games.TicTacToe;
 public class GameClient {
     private Game game = null;
     private boolean isConnected = false;
-    ArrayAdapter<String> actionsAdapter;
-
-    private final TextView gameTerminal;
     private final TCPSocket tcpSocket;
-    private final int randomId = (int) Math.round(Math.random() * 100);
+    private String requestedGame;
 
-    public GameClient(TextView gameTerminal, ArrayAdapter<String> adapter) {
+    ArrayAdapter<String> actionsAdapter;
+    private final ScrollView scrollView;
+    private final TextView gameTerminal;
+
+    public GameClient(TextView gameTerminal, ArrayAdapter<String> adapter, ScrollView scrollView) {
         this.actionsAdapter = adapter;
         setActions(new String[]{"Connect"});
         this.gameTerminal = gameTerminal;
         this.tcpSocket = new TCPSocket(this);
+        this.scrollView = scrollView;
     }
 
     public void setConnected(boolean connected) {
@@ -72,16 +75,19 @@ public class GameClient {
     }
 
     private void requestGame(String game) {
+        requestedGame = game;
         printMessage("Client: Requesting to play " + game + "...");
 
-        byte[] payload = game.equals("TTT") ? ByteCodes.RPS.clone() : ByteCodes.RPS.clone();
+        byte[] payload = game.equals("TTT") ? ByteCodes.TTT.clone() : ByteCodes.RPS.clone();
         Request request = Packet.getRequest(0, ByteCodes.CONFIRM, ByteCodes.CONFIRM_RULES, payload);
         tcpSocket.send(request);
     }
 
     public void handleServerMessage(byte[] message) {
-        System.out.println(randomId + ": handleServerMessage()");
+        System.out.println("handleServerMessage()");
         System.out.println(Arrays.toString(message));
+
+
         if (message.length == 0) return;
         Response r = Packet.getResponse(message);
 
@@ -98,7 +104,7 @@ public class GameClient {
         }
 
         if (r.status == ByteCodes.UPDATE) {
-            printMessage("Server: Game update");
+            printMessage("Client: Received " + Arrays.toString(message));
             game.applyUpdate(r);
         }
 
@@ -109,10 +115,12 @@ public class GameClient {
         }
 
         if (r.status == ByteCodes.SUCCESS) {
-            printMessage("Server: Request was successful");
+//            printMessage("Server: Request was successful");
         }
 
         if (game != null && game.hasEnded()) {
+            game.voiceChat.stopSpeak();
+            game.voiceChat.stopListen();
             game = null;
         }
 
@@ -121,7 +129,10 @@ public class GameClient {
 
     public void printMessage(String message) {
         final Handler ui = new Handler(Looper.getMainLooper());
-        ui.post(() -> gameTerminal.append("\n" + message));
+        ui.post(() -> {
+            gameTerminal.append("\n" + message);
+            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+        });
     }
 
     private void clearActions() {
@@ -135,17 +146,15 @@ public class GameClient {
     }
 
     private Game createGame(int uuid) {
-        return new RockPaperScissors(this, uuid);
+        if (requestedGame.equals("TTT")) {
+            return new TicTacToe(this, uuid);
+        }
 
-//        if (Arrays.equals(request.payload, ByteCodes.TTT)) {
-//            return new TicTacToe();
-//        }
-//
-//        if (Arrays.equals(request.payload, ByteCodes.RPS)) {
-//            return new RockPaperScissors();
-//        }
-//
-//        return null;
+        if (requestedGame.equals("RPS")) {
+            return new RockPaperScissors(this, uuid);
+        }
+
+        return null;
     }
 
     public void updateCurrentActions() {

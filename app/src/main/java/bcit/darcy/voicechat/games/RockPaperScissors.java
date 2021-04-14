@@ -9,9 +9,6 @@ import bcit.darcy.voicechat.Packet.Request;
 import bcit.darcy.voicechat.Packet.Response;
 
 public class RockPaperScissors extends Game {
-    private boolean hasStarted = false;
-    private boolean hasEnded = false;
-
     private final String[] outcomes = {"win", "lose", "tie"};
     private final String[] actions = {"Rock", "Paper", "Scissors"};
 
@@ -51,13 +48,14 @@ public class RockPaperScissors extends Game {
                 ByteCodes.MAKE_MOVE,
                 payload);
 
-        client.printMessage("RPS: Sending packet " + Arrays.toString(Packet.getBytes(r)));
+        client.printMessage("Client: Sending packet " + Arrays.toString(Packet.getBytes(r)));
         client.sendRequest(r);
     }
 
     @Override
     public void applyUpdate(Response update) {
         if (update.context == ByteCodes.START_GAME) {
+            startVoiceChat();
             hasStarted = true;
             client.printMessage("RPS: Game started");
         }
@@ -77,6 +75,7 @@ public class RockPaperScissors extends Game {
     private void endGame() {
         hasEnded = true;
         client.printMessage("RPS: Game ended");
+        startVoiceChat();
     }
 
 

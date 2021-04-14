@@ -46,18 +46,20 @@ public class MainActivity extends AppCompatActivity {
         TextView tvTerminal = findViewById(R.id.tvTerminal);
         Button btnSendMessage = findViewById(R.id.btnSendMessage);
 
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.RECORD_AUDIO},
+                REQUEST_MICROPHONE);
 
         spActions = findViewById(R.id.spActions);
 
         actionsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        GameClient gameClient = new GameClient(tvTerminal, actionsAdapter);
+        GameClient gameClient = new GameClient(tvTerminal, actionsAdapter, svTerminal);
         actionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spActions.setAdapter(actionsAdapter);
 
         btnSendMessage.setOnClickListener(v -> {
             String selectedAction = spActions.getSelectedItem().toString();
             gameClient.handleAction(selectedAction);
-            svTerminal.post(() -> svTerminal.fullScroll(ScrollView.FOCUS_DOWN));
         });
 
         Button btnDisconnect = findViewById(R.id.btnDisconnect);
@@ -69,30 +71,5 @@ public class MainActivity extends AppCompatActivity {
         btnClear.setOnClickListener(view -> {
             tvTerminal.setText("");
         });
-
-//        ActivityCompat.requestPermissions(this,
-//                new String[]{Manifest.permission.RECORD_AUDIO},
-//                REQUEST_MICROPHONE);
-//        VoiceChat vc = new VoiceChat(37);
-//        Button startSpeakButton = findViewById(R.id.btn_start_speak);
-//        startSpeakButton.setOnClickListener(v -> {
-//            vc.startSpeak();
-//        });
-//
-//        Button stopSpeakButton = findViewById(R.id.btn_stop_speak);
-//        stopSpeakButton.setOnClickListener(v -> {
-//            vc.stopSpeak();
-//        });
-//
-//        Button startListenButton = findViewById(R.id.btn_start_listen);
-//        startListenButton.setOnClickListener(v -> {
-//            vc.startListen();
-//        });
-//
-//        Button stopListenButton = findViewById(R.id.btn_stop_listen);
-//        stopListenButton.setOnClickListener(v -> {
-//            vc.stopListen();
-//        });
-
     }
 }
