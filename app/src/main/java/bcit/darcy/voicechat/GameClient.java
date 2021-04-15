@@ -196,7 +196,7 @@ public class GameClient {
                 requestGame("RPS");
                 break;
             default:
-                if (game != null) game.handleAction(action);
+                if (inGame()) game.handleAction(action);
                 else printMessage("Client: Unable to do " + action);
         }
     }
