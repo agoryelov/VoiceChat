@@ -139,7 +139,6 @@ public class TicTacToe extends Game {
     private void endGame() {
         hasEnded = true;
         client.printMessage("TTT: Game ended");
-        stopVoiceChat();
     }
 
     private GameResult parseGameResult(Response update) {

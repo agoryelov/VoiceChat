@@ -68,12 +68,12 @@ public class VoiceChat {
                 byte[] rawBuffer = new byte[buffer.remaining()];
                 buffer.get(rawBuffer);
 
-                System.out.println("SENDING:");
-                System.out.println(Arrays.toString(rawBuffer));
+//                System.out.println("SENDING:");
+//                System.out.println(Arrays.toString(rawBuffer));
 
                 try {
-                    InetAddress dest = InetAddress.getByName("70.71.235.164");
-                    DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 2034);
+                    InetAddress dest = InetAddress.getByName("karelc.com");
+                    DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 3000);
                     voiceSocket.send(p);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -114,12 +114,8 @@ public class VoiceChat {
                 }
 
                 buffer = p.getData();
-                System.out.println("RECEIVED:");
-                System.out.println(Arrays.toString(buffer));
 
                 int packetOrder = ByteBuffer.wrap(buffer).getInt();
-                System.out.println("currentOrder=" + currentOrder);
-                System.out.println("packetOrder=" + packetOrder);
                 if (packetOrder > currentOrder) {
                     currentOrder = packetOrder;
                     track.write(buffer,ORDER_SIZE + UUID_SIZE + PORT_SIZE, VOICE_SIZE);

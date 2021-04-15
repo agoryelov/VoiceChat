@@ -75,7 +75,6 @@ public class RockPaperScissors extends Game {
     private void endGame() {
         hasEnded = true;
         client.printMessage("RPS: Game ended");
-        startVoiceChat();
     }
 
 

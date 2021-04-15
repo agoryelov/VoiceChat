@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +18,7 @@ import bcit.darcy.voicechat.games.RockPaperScissors;
 import bcit.darcy.voicechat.games.TicTacToe;
 
 public class GameClient {
-    private Game game = null;
+    private Game game;
     private boolean isConnected = false;
     private final TCPSocket tcpSocket;
     private String requestedGame;
@@ -24,6 +26,9 @@ public class GameClient {
     ArrayAdapter<String> actionsAdapter;
     private final ScrollView scrollView;
     private final TextView gameTerminal;
+
+    private static final String HOSTNAME = "karelc.com";
+    private static final int PORT = 3000;
 
     public GameClient(TextView gameTerminal, ArrayAdapter<String> adapter, ScrollView scrollView) {
         this.actionsAdapter = adapter;
@@ -33,8 +38,14 @@ public class GameClient {
         this.scrollView = scrollView;
     }
 
+    private boolean inGame() {
+        return game != null && !game.hasEnded();
+    }
+
     public void setConnected(boolean connected) {
-        if (!connected) game = null;
+        if (!connected && inGame()) {
+            game.stopVoiceChat();
+        }
 
         if (!isConnected && connected) {
             printMessage("Client: Connected to server");
@@ -87,9 +98,12 @@ public class GameClient {
         System.out.println("handleServerMessage()");
         System.out.println(Arrays.toString(message));
 
-
         if (message.length == 0) return;
         Response r = Packet.getResponse(message);
+
+        if (r.status != ByteCodes.SUCCESS) {
+            printMessage("Client: Received " + Arrays.toString(message));
+        }
 
         if (r.status == ByteCodes.CLIENT_ERROR) {
             printMessage("Server: Client error");
@@ -103,12 +117,11 @@ public class GameClient {
             printMessage("Server: Game error");
         }
 
-        if (r.status == ByteCodes.UPDATE) {
-            printMessage("Client: Received " + Arrays.toString(message));
+        if (r.status == ByteCodes.UPDATE && inGame()) {
             game.applyUpdate(r);
         }
 
-        if (r.status == ByteCodes.SUCCESS && game == null) {
+        if (r.status == ByteCodes.SUCCESS && !inGame()) {
             int uuid = ByteBuffer.wrap(r.payload).getInt();
             game = createGame(uuid);
             printMessage("Server: Joined game with uuid=" + uuid);
@@ -116,12 +129,6 @@ public class GameClient {
 
         if (r.status == ByteCodes.SUCCESS) {
 //            printMessage("Server: Request was successful");
-        }
-
-        if (game != null && game.hasEnded()) {
-            game.voiceChat.stopSpeak();
-            game.voiceChat.stopListen();
-            game = null;
         }
 
         updateCurrentActions();
@@ -166,7 +173,7 @@ public class GameClient {
             return;
         }
 
-        if (game == null) {
+        if (!inGame()) {
             String[] actions = new String[]{"Play TicTacToe", "Play RPS"};
             setActions(actions);
             return;

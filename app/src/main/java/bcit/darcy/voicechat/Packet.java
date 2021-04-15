@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 public class Packet {
     public static class Response {
-        public static final int MIN_SIZE = 3;
         public byte status = 0;
         public byte context = 0;
         public byte payloadSize = 0;
