@@ -44,10 +44,10 @@ public class GameClient {
 
     public void setConnected(boolean connected) {
         if (!connected && inGame()) {
-            game.stopVoiceChat();
+            game.endGame();
         }
 
-        if (!isConnected && connected) {
+        if (connected) {
             printMessage("Client: Connected to server");
         }
 

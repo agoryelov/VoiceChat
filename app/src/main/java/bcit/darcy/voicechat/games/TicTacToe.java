@@ -111,13 +111,10 @@ public class TicTacToe extends Game {
 
             GameResult result = parseGameResult(update);
             client.printMessage("TTT: Game outcome is " + result.toString());
-
-            endGame();
         }
 
         if (update.context == ByteCodes.DISCONNECTED) {
             client.printMessage("TTT: Opponent disconnected");
-            endGame();
         }
     }
 
@@ -134,11 +131,6 @@ public class TicTacToe extends Game {
         }
 
         return update.payload[0];
-    }
-
-    private void endGame() {
-        hasEnded = true;
-        client.printMessage("TTT: Game ended");
     }
 
     private GameResult parseGameResult(Response update) {
@@ -169,10 +161,5 @@ public class TicTacToe extends Game {
         }
 
         return cell;
-    }
-
-    @Override
-    public String getCurrentState() {
-        return null;
     }
 }

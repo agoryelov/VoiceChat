@@ -28,9 +28,14 @@ public abstract class Game {
         client.printMessage("Client: Voice chat ended");
     }
 
+    public void endGame() {
+        hasEnded = true;
+        stopVoiceChat();
+        client.printMessage("Client: Game ended");
+    }
+
     abstract public String[] getActions();
     abstract public boolean hasEnded();
     abstract public void handleAction(String action);
     abstract public void applyUpdate(Response update);
-    abstract public String getCurrentState();
 }

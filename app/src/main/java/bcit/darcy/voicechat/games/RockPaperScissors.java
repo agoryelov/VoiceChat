@@ -63,18 +63,11 @@ public class RockPaperScissors extends Game {
         if (update.context == ByteCodes.GAME_END) {
             String message = parseGameEnd(update);
             client.printMessage("RPS: " + message);
-            endGame();
         }
 
         if (update.context == ByteCodes.DISCONNECTED) {
             client.printMessage("RPS: Opponent disconnected");
-            endGame();
         }
-    }
-
-    private void endGame() {
-        hasEnded = true;
-        client.printMessage("RPS: Game ended");
     }
 
 
@@ -103,10 +96,5 @@ public class RockPaperScissors extends Game {
         String opponentAction = actions[actionIndex - 1];
 
         return "Opponent chose " + opponentAction + ", you " + outcome;
-    }
-
-    @Override
-    public String getCurrentState() {
-        return "";
     }
 }
