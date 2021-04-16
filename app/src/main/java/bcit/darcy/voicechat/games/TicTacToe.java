@@ -95,8 +95,8 @@ public class TicTacToe extends Game {
             int opponentId = (playerId + 1) % 2;
             board[cell] = SYMBOLS[opponentId];
             client.printMessage("TTT: Opponent moves on " + actions[cell]);
-            printBoard();
             myTurn = true;
+            printBoard();
         }
 
         if (update.context == ByteCodes.GAME_END) {
@@ -106,11 +106,11 @@ public class TicTacToe extends Game {
             if (board[cell] == '-') {
                 board[cell] = SYMBOLS[opponentId];
                 client.printMessage("TTT: Opponent moves on " + actions[cell]);
-                printBoard();
             }
 
             GameResult result = parseGameResult(update);
             client.printMessage("TTT: Game outcome is " + result.toString());
+            printBoard();
         }
 
         if (update.context == ByteCodes.DISCONNECTED) {

@@ -27,9 +27,6 @@ public class GameClient {
     private final ScrollView scrollView;
     private final TextView gameTerminal;
 
-    private static final String HOSTNAME = "karelc.com";
-    private static final int PORT = 3000;
-
     public GameClient(TextView gameTerminal, ArrayAdapter<String> adapter, ScrollView scrollView) {
         this.actionsAdapter = adapter;
         setActions(new String[]{"Connect"});

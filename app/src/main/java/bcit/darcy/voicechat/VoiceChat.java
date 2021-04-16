@@ -24,9 +24,8 @@ public class VoiceChat {
 
     private static final int ORDER_SIZE = 4; // bytes
     private static final int UUID_SIZE = 4; // bytes
-    private static final int PORT_SIZE = 2; // bytes
     private static final int VOICE_SIZE = 5000; // bytes
-    private static final int PACKET_SIZE = ORDER_SIZE + UUID_SIZE + PORT_SIZE + VOICE_SIZE;
+    private static final int PACKET_SIZE = ORDER_SIZE + UUID_SIZE + VOICE_SIZE;
 
     private boolean isSpeaking = false;
     private boolean isListening = false;
@@ -58,7 +57,7 @@ public class VoiceChat {
 
             while (isSpeaking) {
                 buffer.clear();
-                buffer.putInt(currentOrder++).putInt(UUID).putShort((short) 0);
+                buffer.putInt(currentOrder++).putInt(UUID);
 
                 byte[] voiceBuffer = new byte[VOICE_SIZE];
                 recorder.read(voiceBuffer, 0, VOICE_SIZE);
@@ -73,7 +72,7 @@ public class VoiceChat {
 
                 try {
                     InetAddress dest = InetAddress.getByName("karelc.com");
-                    DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 3000);
+                    DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 2034);
                     voiceSocket.send(p);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -118,7 +117,7 @@ public class VoiceChat {
                 int packetOrder = ByteBuffer.wrap(buffer).getInt();
                 if (packetOrder > currentOrder) {
                     currentOrder = packetOrder;
-                    track.write(buffer,ORDER_SIZE + UUID_SIZE + PORT_SIZE, VOICE_SIZE);
+                    track.write(buffer,ORDER_SIZE + UUID_SIZE, VOICE_SIZE);
                 }
             }
 
