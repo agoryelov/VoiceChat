@@ -7,13 +7,14 @@ import bcit.darcy.voicechat.GameClient;
 import bcit.darcy.voicechat.Packet;
 import bcit.darcy.voicechat.Packet.Request;
 import bcit.darcy.voicechat.Packet.Response;
+import bcit.darcy.voicechat.VoiceChat;
 
 public class RockPaperScissors extends Game {
     private final String[] outcomes = {"win", "lose", "tie"};
     private final String[] actions = {"Rock", "Paper", "Scissors"};
 
-    public RockPaperScissors(GameClient client, int uuid) {
-        super(client, uuid);
+    public RockPaperScissors(GameClient client, VoiceChat voice, int uuid) {
+        super(client, voice, uuid);
     }
 
     @Override

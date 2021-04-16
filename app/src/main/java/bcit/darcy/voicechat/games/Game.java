@@ -8,12 +8,13 @@ public abstract class Game {
     boolean hasStarted = false;
     boolean hasEnded = false;
     GameClient client;
-    public VoiceChat voiceChat;
+    VoiceChat voiceChat;
     int uuid;
-    public Game(GameClient client, int uuid) {
+
+    public Game(GameClient client, VoiceChat voice, int uuid) {
         this.client = client;
         this.uuid = uuid;
-        this.voiceChat = new VoiceChat(uuid);
+        this.voiceChat = voice;
     }
 
     public void startVoiceChat() {

@@ -27,11 +27,13 @@ public class GameClient {
     private final ScrollView scrollView;
     private final TextView gameTerminal;
 
+    private static final String HOSTNAME = "karelc.com";
+
     public GameClient(TextView gameTerminal, ArrayAdapter<String> adapter, ScrollView scrollView) {
         this.actionsAdapter = adapter;
         setActions(new String[]{"Connect"});
         this.gameTerminal = gameTerminal;
-        this.tcpSocket = new TCPSocket(this);
+        this.tcpSocket = new TCPSocket(HOSTNAME, this);
         this.scrollView = scrollView;
     }
 
@@ -150,12 +152,13 @@ public class GameClient {
     }
 
     private Game createGame(int uuid) {
+        VoiceChat voiceChat = new VoiceChat(HOSTNAME, uuid);
         if (requestedGame.equals("TTT")) {
-            return new TicTacToe(this, uuid);
+            return new TicTacToe(this, voiceChat, uuid);
         }
 
         if (requestedGame.equals("RPS")) {
-            return new RockPaperScissors(this, uuid);
+            return new RockPaperScissors(this, voiceChat, uuid);
         }
 
         return null;

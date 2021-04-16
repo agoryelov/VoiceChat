@@ -30,11 +30,12 @@ public class VoiceChat {
     private boolean isSpeaking = false;
     private boolean isListening = false;
     private final int UUID;
+    private final String HOSTNAME;
 
     DatagramSocket voiceSocket = null;
 
-    public VoiceChat(int UUID) {
-        System.out.println(PACKET_SIZE);
+    public VoiceChat(String hostname, int UUID) {
+        this.HOSTNAME = hostname;
         this.UUID = UUID;
 
         try {
@@ -71,7 +72,7 @@ public class VoiceChat {
 //                System.out.println(Arrays.toString(rawBuffer));
 
                 try {
-                    InetAddress dest = InetAddress.getByName("karelc.com");
+                    InetAddress dest = InetAddress.getByName(HOSTNAME);
                     DatagramPacket p = new DatagramPacket(rawBuffer, rawBuffer.length, dest, 2034);
                     voiceSocket.send(p);
                 } catch (IOException e) {

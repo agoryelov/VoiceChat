@@ -9,8 +9,13 @@ import bcit.darcy.voicechat.GameClient;
 import bcit.darcy.voicechat.Packet;
 import bcit.darcy.voicechat.Packet.Request;
 import bcit.darcy.voicechat.Packet.Response;
+import bcit.darcy.voicechat.VoiceChat;
 
 public class TicTacToe extends Game {
+    public TicTacToe(GameClient client, VoiceChat voice, int uuid) {
+        super(client, voice, uuid);
+    }
+
     private enum GameResult { WIN, LOSS, TIE, UNKNOWN };
     private final String[] actions = new String[] {
             "Cell 1x1", "Cell 1x2", "Cell 1x3",
@@ -22,10 +27,6 @@ public class TicTacToe extends Game {
     private final char[] board = {'-', '-', '-', '-', '-', '-', '-', '-', '-'};
     private int playerId;
     private boolean myTurn;
-
-    public TicTacToe(GameClient client, int uuid) {
-        super(client, uuid);
-    }
 
     @Override
     public String[] getActions() {

@@ -17,8 +17,10 @@ public class TCPSocket {
 
     private static final int MIN_SIZE = 3;
     private static final int PAYLOAD_SIZE_INDEX = 2;
+    private final String HOSTNAME;
 
-    public TCPSocket(GameClient gameClient) {
+    public TCPSocket(String hostname, GameClient gameClient) {
+        this.HOSTNAME = hostname;
         this.gameClient = gameClient;
     }
 
@@ -26,7 +28,7 @@ public class TCPSocket {
         new Thread(() -> {
             try {
                 socket = new Socket();
-                InetSocketAddress a = new InetSocketAddress("karelc.com", 3000);
+                InetSocketAddress a = new InetSocketAddress(HOSTNAME, 3000);
                 socket.connect(a, 1000);
                 gameClient.setConnected(socket.isConnected());
 
