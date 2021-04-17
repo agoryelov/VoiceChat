@@ -1,7 +1,6 @@
 package bcit.darcy.voicechat;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class Packet {
     public static class Response {

@@ -27,7 +27,7 @@ public class GameClient {
     private final ScrollView scrollView;
     private final TextView gameTerminal;
 
-    private static final String HOSTNAME = "karelc.com";
+    private static final String HOSTNAME = "70.71.235.164";
 
     public GameClient(TextView gameTerminal, ArrayAdapter<String> adapter, ScrollView scrollView) {
         this.actionsAdapter = adapter;

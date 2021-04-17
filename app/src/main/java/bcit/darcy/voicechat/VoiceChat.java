@@ -114,11 +114,14 @@ public class VoiceChat {
                 }
 
                 buffer = p.getData();
+                System.out.println("RECEIVED: " + Arrays.toString(buffer).substring(0, 45));
 
                 int packetOrder = ByteBuffer.wrap(buffer).getInt();
-                if (packetOrder > currentOrder) {
+                if (packetOrder >= currentOrder) {
                     currentOrder = packetOrder;
                     track.write(buffer,ORDER_SIZE + UUID_SIZE, VOICE_SIZE);
+                } else {
+                    System.out.println("VoiceChat: WRONG ORDER");
                 }
             }
 

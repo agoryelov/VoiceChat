@@ -28,7 +28,7 @@ public class TCPSocket {
         new Thread(() -> {
             try {
                 socket = new Socket();
-                InetSocketAddress a = new InetSocketAddress(HOSTNAME, 3000);
+                InetSocketAddress a = new InetSocketAddress(HOSTNAME, 2034);
                 socket.connect(a, 1000);
                 gameClient.setConnected(socket.isConnected());
 
